@@ -1,0 +1,140 @@
+@startuml
+
+' ================================
+' ENTIDADES
+' ================================
+
+entity Role {
+  + id : UUID
+  --
+  nome : string
+  descricao : string
+  ativo : boolean
+}
+
+entity User {
+  + id : UUID
+  --
+  role_id : UUID
+  nome : string
+  email : string
+  documento : string
+  senha_hash : string
+  telefone : string
+  ativo : boolean
+  sexo : string
+  created_at : datetime
+  updated_at : datetime
+}
+
+entity Evento {
+  + id : UUID
+  --
+  user_id : UUID
+  categoria_id : UUID
+  cidade_id : UUID
+  titulo : string
+  descricao : text
+  data_inicio : date
+  data_fim : date
+  horario_inicio : time
+  horario_fim : time
+  local_nome : string
+  endereco : string
+  cep : string
+  imagem_capa_url : string
+  status : string
+  origem : string
+  created_at : datetime
+  updated_at : datetime
+}
+
+entity Categoria {
+  + id : UUID
+  --
+  nome : string
+  descricao : string
+  ativo : boolean
+}
+
+entity Estado {
+  + id : UUID
+  --
+  nome : string
+  sigla : string
+  ativo : boolean
+}
+
+entity Cidade {
+  + id : UUID
+  --
+  estado_id : UUID
+  nome : string
+  ativo : boolean
+}
+
+entity Evento_Status_Historico {
+  + id : UUID
+  --
+  evento_id : UUID
+  user_id : UUID
+  status_anterior : string
+  novo_status : string
+  observacao : text
+  created_at : datetime
+}
+
+entity Destaque_Evento {
+  + id : UUID
+  --
+  evento_id : UUID
+  tipo : string
+  ordem_exibicao : integer
+  data_inicio : date
+  data_fim : date
+  ativo : boolean
+}
+
+entity Fonte_Externa {
+  + id : UUID
+  --
+  estado_id : UUID
+  nome : string
+  url_base : string
+  ativo : boolean
+}
+
+entity Contrato_Publicidade {
+  + id : UUID
+  --
+  user_id : UUID
+  evento_id : UUID
+  plano_id : UUID
+  data_inicio : date
+  data_fim : date
+  status : string
+  valor_pago : decimal
+}
+
+' ================================
+' RELACIONAMENTOS
+' ================================
+
+Role ||--o{ User
+
+User ||--o{ Evento
+Categoria ||--o{ Evento
+Cidade ||--o{ Evento
+Estado ||--o{ Cidade
+
+Evento ||--o{ Evento_Status_Historico
+User ||--o{ Evento_Status_Historico
+
+Evento ||--o{ Destaque_Evento
+
+Estado ||--o{ Fonte_Externa
+
+User ||--o{ Contrato_Publicidade
+Evento ||--o{ Contrato_Publicidade
+
+@enduml
